@@ -10,6 +10,7 @@ const planets = {
 }
 function dogYears(planet, dogAge) {
     dogAge = dogAge/31557600;
-    dogAge = dogAge / 7 * planets[planet]
+    dogAge = dogAge / planets[planet] * 7
     return Math.round(dogAge*100) /100 ;
 }
+console.log(dogYears('earth', 1000000000))
