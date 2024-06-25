@@ -36,21 +36,21 @@ const mapToObj = (map) => {
     let obj = {}
     for (var [key, value] of map.entries()) {
         obj[key] = value
-      }
+    }
     return obj
 }
 const objToArr = (obj) => {
     let arr = []
     for (const [key, value] of Object.entries(obj)) {
         arr.push(value)
-      }
+    }
     return arr
 }
 const objToMap = (obj) => {
     let map = new Map
     for (let key in obj) {
         map.set(key, obj[key])
-      }
+    }
     return map
 } 
 const arrToObj = (arr) => {
@@ -67,13 +67,15 @@ const strToObj = (str) => {
     }
     return obj
 }
-
-const superTypeOf = (value) => {
-    if (value === null) return 'null';
-    if (Array.isArray(value)) return 'array';
-    if (value instanceof Set) return 'set';
-    if (value instanceof Map) return 'map';
-    if (value instanceof Date) return 'date';
-    if (value instanceof RegExp) return 'regexp';
-    return typeof value;
+const superTypeOf = (e) => {
+    if (e=== null) return 'null'
+    let instances = { Set, Map, Array, Function }
+    for (let key in instances) {
+        if (e instanceof instances[key]) return key
+    }
+    let types = { Number: 'number', String: 'string', Object: 'object' }
+    for (let key in types) {
+        if (typeof e=== types[key]) return key
+    }
+    return typeof e
 }
