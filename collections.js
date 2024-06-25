@@ -1,60 +1,74 @@
-function arrToSet(arr) {
-    return new Set(arr);
-}
-
-function arrToStr(arr) {
-    return arr.join(',');
-}
-
-function setToArr(set) {
-    return Array.from(set);
-}
-
-function setToStr(set) {
-    return Array.from(set).join(',');
-}
-
-function strToArr(str) {
-    return str.split(',');
-}
-
-function strToSet(str) {
-    return new Set(str.split(','));
-}
-
-function mapToObj(map) {
-    const obj = {};
-    for (let [key, value] of map) {
-        obj[key] = value;
+const arrToSet = (arr) => {
+    let set = new Set
+    for(let i = 0;i<arr.length;i++){
+        set.add(arr[i])
     }
-    return obj;
+    return set
+}
+const arrToStr = (arr) => {
+    let str = ''
+    for(let i = 0;i<arr.length;i++){
+        str += arr[i]
+    }
+    return str
+}
+const setToArr = (set) => {
+    let arr = Array.from(set)
+    return arr
+}
+const setToStr = (set) => {
+    let str = ''
+    for (let item of set.values()) str += item;
+    return str
+}
+const strToArr = (str) => {
+    let arr = Array.from(str)
+    return arr
+}
+const strToSet = (str) => {
+    let set = new Set
+    for(let i = 0;i<str.length;i++){
+        set.add(str[i])
+    }
+    return set
+}
+const mapToObj = (map) => {
+    let obj = {}
+    for (var [key, value] of map.entries()) {
+        obj[key] = value
+      }
+    return obj
+}
+const objToArr = (obj) => {
+    let arr = []
+    for (const [key, value] of Object.entries(obj)) {
+        arr.push(value)
+      }
+    return arr
+}
+const objToMap = (obj) => {
+    let map = new Map
+    for (let key in obj) {
+        map.set(key, obj[key])
+      }
+    return map
+} 
+const arrToObj = (arr) => {
+    let obj = {}
+    for(let i = 0;i<arr.length;i++){
+        obj[i] = arr[i]
+    }
+    return obj
+}
+const strToObj = (str) => {
+    let obj = {}
+    for(let i = 0;i<str.length;i++){
+        obj[i] = str[i]
+    }
+    return obj
 }
 
-function objToArr(obj) {
-    return Object.entries(obj);
-}
-
-function objToMap(obj) {
-    return new Map(Object.entries(obj));
-}
-
-function arrToObj(arr) {
-    const obj = {};
-    arr.forEach((value, index) => {
-        obj[index] = value;
-    });
-    return obj;
-}
-
-function strToObj(str) {
-    const obj = {};
-    str.split(',').forEach((value, index) => {
-        obj[index] = value;
-    });
-    return obj;
-}
-
-function superTypeOf(value) {
+const superTypeOf = (value) => {
     if (value === null) return 'null';
     if (Array.isArray(value)) return 'array';
     if (value instanceof Set) return 'set';
