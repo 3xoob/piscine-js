@@ -1,23 +1,23 @@
 function round(x) {
     let sign = x >= 0 ? 1 : -1;
     let absX = sign * x;
-    let integerPart = absX | 0;
-    if (absX - integerPart >= 0.5) {
-        return sign * (integerPart + 1);
+    let intP = absX | 0;
+    if (absX - intP >= 0.5) {
+        return sign * (intP + 1);
     } else {
-        return sign * integerPart;
+        return sign * intP;
     }
 }
 function ceil(x) {
-    let integerPart = x | 0;
-    if (x > 0 && x !== integerPart) {
-        integerPart++;
+    let intP = x | 0;
+    if (x > 0 && x !== intP) {
+        intP++;
     }
-    return integerPart;
+    return intP;
 }
 function floor(x) {
-    let integerPart = x | 0;
-    return integerPart;
+    let intP = x | 0;
+    return intP;
 }
 function trunc(x) {
     if (x >= 0) {
