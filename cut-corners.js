@@ -1,58 +1,86 @@
-function round(n) {
-    let ost
-    let res
-    let flag = false
-    if (n < 0) {
-        n = -n
-        flag = true
+function round(int) {
+    let neg = false;
+    if (int < 0) {
+        neg = true;
+        int = -int;
     }
-    ost = n % 1
-    if (ost > 0.5) {
-        res = n + 1 - ost
+    let counter = 0;
+    while (!(int < 1 && int > -1)) {
+        int -= 1;
+        counter++;
+    }
+    if (int < 0.5) {
+        if (neg) {
+            return -counter;
+        } else {
+            return counter;
+        }
     } else {
-        res = n - ost
+        if (neg) {
+            return -counter - 1;
+        } else {
+            return counter + 1;
+        }
     }
-    if (flag) {
-        res = -res
-    }
-    return res
 }
-function ceil(n) {
-    let ost
-    let res
-    ost = n % 1
-    if (n > 0 && ost != 0) {
-        return res = n + 1 - ost
-    } else {
-        return res = n - ost
+
+function floor(int) {
+    let neg = false;
+    if (int < 0) {
+        neg = true;
+        int = -int;
     }
-    return n
+    let intCopy = int;
+    let counter = 0;
+    while (!(intCopy < 1 && intCopy > -1)) {
+        intCopy -= 1;
+        counter++;
+    }
+    if (neg) {
+        return -counter - 1;
+    } else {
+        return counter;
+    }
 }
-function floor(n) {
-    let ost
-    let res
-    ost = n % 1
-    if (n > 0 && ost != 0) {
-        return res = n - ost
-    } else if (ost === 0) {
-        return n
-    } else {
-        let x
-        x = 1 + ost
-        return res = n - x
+
+function ceil(int) {
+    if (!int) return 0;
+    let neg = false;
+    if (int < 0) {
+        neg = true;
+        int = -int;
     }
-    return n
+    let intCopy = int;
+    let counter = 0;
+    while (!(intCopy < 1 && intCopy >= 0)) {
+        intCopy -= 1;
+        counter++;
+    }
+    if (neg) {
+        return -counter;
+    } else {
+        return counter + 1;
+    }
 }
-function trunc(n) {
-    let ost
-    let res
-    ost = n % 1
-    if (n > 0 && ost != 0) {
-        return res = n - ost
-    } else {
-        let x
-        x = 1 + ost
-        return res = n - ost
+
+function trunc(int) {
+    let counter = 0;
+    if (int > 0xfffffffff) {
+        int -= 0xfffffffff;
+        counter += 0xfffffffff;
     }
-    return n
+    let neg = false;
+    if (int < 0) {
+        neg = true;
+        int = -int;
+    }
+    let intCopy = int;
+    while (!(intCopy < 1 && intCopy > -1)) {
+        intCopy -= 1;
+        counter++;
+    }
+    if (neg) {
+        return -counter;
+    }
+    return counter;
 }
