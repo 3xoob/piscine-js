@@ -1,4 +1,4 @@
-function indexOf(array, value , start) {
+function indexOf(array, value , start=0) {
     for (let i = start; i < array.length; i++) {
         if (array[i] === value) {
             return i
