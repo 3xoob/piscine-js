@@ -1,38 +1,58 @@
-const dec = (num) => {
-    var i
-    if (num > 0xfffffffff) {
-        num -= 0xfffffffff;
-        i += 0xfffffffff;
+function round(n) {
+    let ost
+    let res
+    let flag = false
+    if (n < 0) {
+        n = -n
+        flag = true
     }
-    var i
-    var og = num
-    if(num < 0){
-        num = -num
+    ost = n % 1
+    if (ost > 0.5) {
+        res = n + 1 - ost
+    } else {
+        res = n - ost
     }
-    for(i = 0 ; i<= num ; i++){}
-    if(og < 0){
-        return -(num -(i-1))
+    if (flag) {
+        res = -res
     }
-    return num -(i-1)
+    return res
 }
-const round = (num) =>{
-    let decimal = dec(num)
-    let clean = num - decimal
-    let output = 0
-    if(num > 0){
-        if(decimal >= 0.5){
-            output = clean+1
-        }else{
-            output = clean 
-        }
-    }else{
-        if(decimal >= -0.5){
-            output = clean 
-        }else{
-            output = clean -1
-        }
+function ceil(n) {
+    let ost
+    let res
+    ost = n % 1
+    if (n > 0 && ost != 0) {
+        return res = n + 1 - ost
+    } else {
+        return res = n - ost
     }
- 
-    return output
+    return n
 }
-
+function floor(n) {
+    let ost
+    let res
+    ost = n % 1
+    if (n > 0 && ost != 0) {
+        return res = n - ost
+    } else if (ost === 0) {
+        return n
+    } else {
+        let x
+        x = 1 + ost
+        return res = n - x
+    }
+    return n
+}
+function trunc(n) {
+    let ost
+    let res
+    ost = n % 1
+    if (n > 0 && ost != 0) {
+        return res = n - ost
+    } else {
+        let x
+        x = 1 + ost
+        return res = n - ost
+    }
+    return n
+}
