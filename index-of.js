@@ -6,8 +6,8 @@ function indexOf(array, value , start=0) {
     }
     return -1
 }
-function lastIndexOf(array, value) {
-    for (let i = array.length - 1; i >= 0; i--) {
+function lastIndexOf(array, value, start= array.length - 1) {
+    for (let i = start ; i >= 0; i--) {
         if (array[i] === value) {
             return i
         }
