@@ -1,20 +1,20 @@
 function cutFirst(str) {
     if (str.length <= 2) {
-        return str;
+        return '';
     }
     return str.slice(2);
 }
 
 function cutLast(str) {
     if (str.length <= 2) {
-        return str;
+        return '';
     }
     return str.slice(0, -2);
 }
 
 function cutFirstLast(str) {
     if (str.length <= 4) {
-        return str;
+        return '';
     }
     return str.slice(2, -2);
 }
