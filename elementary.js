@@ -45,7 +45,6 @@ function modulo(a, b) {
     }
     if (b < 0) {
         b = -b;
-        isNegative = !isNegative;
     }
     while (a >= b) {
         a -= b;
@@ -55,3 +54,4 @@ function modulo(a, b) {
     }
     return a;
 }
+
