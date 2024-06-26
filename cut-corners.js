@@ -1,28 +1,38 @@
-function round(x) {
-    let sign = x >= 0 ? 1 : -1;
-    let absX = sign * x;
-    let intP = absX | 0;
-    if (absX - intP >= 0.5) {
-        return sign * (intP + 1);
-    } else {
-        return sign * intP;
+const dec = (num) => {
+    var i
+    if (num > 0xfffffffff) {
+        num -= 0xfffffffff;
+        i += 0xfffffffff;
     }
-}
-function ceil(x) {
-    let intP = x | 0;
-    if (x > 0 && x !== intP) {
-        intP++;
+    var i
+    var og = num
+    if(num < 0){
+        num = -num
     }
-    return intP;
-}
-function floor(x) {
-    let intP = x | 0;
-    return intP;
-}
-function trunc(x) {
-    if (x >= 0) {
-        return x | 0;
-    } else {
-        return -(-x | 0);
+    for(i = 0 ; i<= num ; i++){}
+    if(og < 0){
+        return -(num -(i-1))
     }
+    return num -(i-1)
 }
+const round = (num) =>{
+    let decimal = dec(num)
+    let clean = num - decimal
+    let output = 0
+    if(num > 0){
+        if(decimal >= 0.5){
+            output = clean+1
+        }else{
+            output = clean 
+        }
+    }else{
+        if(decimal >= -0.5){
+            output = clean 
+        }else{
+            output = clean -1
+        }
+    }
+ 
+    return output
+}
+
