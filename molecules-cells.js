@@ -1,41 +1,41 @@
-function DNAtoRNA(dna) {
-    let rna = '';
-    for (let nucleotide of dna) {
+function DNAtoRNA(DNA) {
+    let RNA = '';
+    for (let nucleotide of DNA) {
       switch (nucleotide) {
         case 'G':
-          rna += 'C';
+          RNA += 'C';
           break;
         case 'C':
-          rna += 'G';
+          RNA += 'G';
           break;
         case 'T':
-          rna += 'A';
+          RNA += 'A';
           break;
         case 'A':
-          rna += 'U';
+          RNA += 'U';
           break;
       }
     }
-    return rna;
+    return RNA;
 }
   
-function RNAtoDNA(rna) {
-    let dna = '';
-    for (let nucleotide of rna) {
+function RNAtoDNA(RNA) {
+    let DNA = '';
+    for (let nucleotide of RNA) {
       switch (nucleotide) {
         case 'C':
-          dna += 'G';
+          DNA += 'G';
           break;
         case 'G':
-          dna += 'C';
+          DNA += 'C';
           break;
         case 'A':
-          dna += 'T';
+          DNA += 'T';
           break;
         case 'U':
-          dna += 'A';
+          DNA += 'A';
           break;
       }
     }
-    return dna;
+    return DNA;
 }
