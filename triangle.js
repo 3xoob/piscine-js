@@ -1,6 +1,6 @@
-function triangle(char, n) {
+function triangle(char, num) {
     let str = "";
-    for (var i = 1; i <= n; i++) {
+    for (var i = 1; i <= num; i++) {
         str = str + char.repeat(i) + "\n";
     }
     return str.slice(0, -1);
