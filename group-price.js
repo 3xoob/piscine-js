@@ -1,7 +1,9 @@
 function groupPrice(str) {
-    const prices = str.match(/(([A-Z]{3})|\$)([0-9]+\.[0-9]+)/g) || [];
-    return prices.map(price => {
-        const [whole, integer, decimal] = price.match(/([0-9]+)\.([0-9]+)/).slice(0, 3);
-        return [whole, integer, decimal];
+    const priceRegex = /(([A-Z]{3})|\$)([0-9]+\.[0-9]+)/g;
+    const matches = str.match(priceRegex) || [];
+    const result = matches.map(price => {
+        const [_, integer, decimal] = price.match(/([0-9]+)\.([0-9]+)/);
+        return [price, integer, decimal];
     });
+    return result;
 }
