@@ -1,13 +1,23 @@
 function isValid(date) {
-    return date instanceof Date && !isNaN(date.getTime());
+    if (isNaN(date) || date == 0) {
+        return false
+    } else {
+        return true
+    }
 }
 
-function isAfter(date1, date2) {
-    return isValid(date1) && isValid(date2) && date1 > date2;
+function isAfter(d1, d2) {
+    if (d1 > d2) {
+        return true;
+    }
+    return false;
 }
 
-function isBefore(date1, date2) {
-    return isValid(date1) && isValid(date2) && date1 < date2;
+function isBefore(d1, d2) {
+    if (d1 < d2) {
+        return true;
+    }
+    return false;
 }
 
 function isFuture(date) {
