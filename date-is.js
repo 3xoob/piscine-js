@@ -11,9 +11,21 @@ function isBefore(date1, date2) {
 }
 
 function isFuture(date) {
-    return isValid(date) && date > Date.now();
+    if (!isValid(date)) {
+        return false;
+    }
+    if (new Date(date).getTime() > Date.now()) {
+        return true;
+    }
+    return false;
 }
 
 function isPast(date) {
-    return isValid(date) && date < new Date();
+    if (!isValid(date)) {
+        return false;
+    }
+    if (new Date(date).getTime() < Date.now()) {
+        return true;
+    }
+    return false;
 }
