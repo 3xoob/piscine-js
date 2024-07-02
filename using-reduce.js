@@ -1,11 +1,29 @@
-function adder(numbers) {
-    return numbers.reduce((acc, num) => acc + num, 0);
+function adder(numbers, value) {
+    return numbers.reduce((acc, item) => acc + item,
+    value === undefined ? 0 : value
+);
 }
-function sumOrMul(numbers, initialValue = 0) {
-    return numbers.reduce((acc, num) => {
-        return num % 2 === 0 ? acc * num : acc + num;
-    }, initialValue);
+function sumOrMul(numbers, initialValue) {
+    return numbers.reduce(
+        (acc, item) => {
+            if (item % 2 === 0) {
+                return acc * item;
+            } else {
+                return acc + item;
+            }
+        },
+        initialValue === undefined ? 0 : initialValue
+    );
 }
-function funcExec(functions, initialValue) {
-    return functions.reduce((acc, fn) => fn(acc), initialValue);
+function funcExec(arr, value) {
+    return arr.reduce(
+        (acc, item) => {
+            if (typeof item === "function") {
+                return item(acc, value);
+            } else {
+                return acc;
+            }
+        },
+        value === undefined ? 0 : value
+    );
 }
