@@ -1,7 +1,7 @@
 var circles = [];
 var box;
-
 class Circle {
+    // Creates an instance of a circle
     constructor(x, y) {
         this.x = x;
         this.y = y;
@@ -11,21 +11,18 @@ class Circle {
         this.draw();
         circles.push(this);
     }
-
+    // "Draws" the circle by creating a div and appending it to the body
     draw() {
         this.HTML = document.createElement("div");
         this.HTML.classList.add("circle");
         this.HTML.style.position = "absolute";
         this.HTML.style.top = this.y + "px";
         this.HTML.style.left = this.x + "px";
-        this.HTML.style.width = this.diameter + "px";
-        this.HTML.style.height = this.diameter + "px";
-        this.HTML.style.borderRadius = "50%";
         this.HTML.style.background = "white";
         this.trapped();
         document.body.appendChild(this.HTML);
     }
-
+    // Moves the circle to the given x and y coordinates
     move(x, y) {
         this.trapped();
         if (!this.isTrapped) {
@@ -34,23 +31,23 @@ class Circle {
             this.HTML.style.top = this.y + "px";
             this.HTML.style.left = this.x + "px";
         } else {
-            if (this.inRectangle(x, y)) {
+            if (this.inReactangle(x, y)) {
                 this.x = x;
                 this.y = y;
                 this.HTML.style.top = this.y + "px";
                 this.HTML.style.left = this.x + "px";
             } else {
-                if (this.inRectangle(x, this.y)) {
+                if (this.inReactangle(x, this.y)) {
                     this.x = x;
                     this.HTML.style.left = this.x + "px";
-                } else if (this.inRectangle(this.x, y)) {
+                } else if (this.inReactangle(this.x, y)) {
                     this.y = y;
                     this.HTML.style.top = this.y + "px";
                 }
             }
         }
     }
-
+    // Checks if the circle is inside the box
     trapped() {
         if (
             this.x > box.x &&
@@ -65,14 +62,18 @@ class Circle {
             this.HTML.style.background = "white";
         }
     }
-
-    inRectangle(x, y) {
-        return (
+    // Checks if the given x and y coordinates for the circle are inside the box
+    inReactangle(x, y) {
+        if (
             x > box.x &&
             x + this.diameter < box.x + box.width &&
             y > box.y &&
             y + this.diameter < box.y + box.height
-        );
+        ) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
@@ -84,9 +85,6 @@ class Box {
         this.HTML.style.top = "50%";
         this.HTML.style.left = "50%";
         this.HTML.style.transform = "translate(-50%, -50%)";
-        this.HTML.style.width = "100px";
-        this.HTML.style.height = "100px";
-        this.HTML.style.border = "1px solid black";
         document.body.appendChild(this.HTML);
         this.x = this.HTML.offsetLeft - this.HTML.offsetWidth / 2 - 1; // -1 to account for the border
         this.y = this.HTML.offsetTop - this.HTML.offsetHeight / 2 - 1;
@@ -116,9 +114,5 @@ function moveCircle(e) {
 function setBox() {
     box = new Box();
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-    setBox();
-});
 
 export { createCircle, moveCircle, setBox };
