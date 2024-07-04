@@ -1,59 +1,124 @@
-document.addEventListener("DOMContentLoaded", () => {
-    document.addEventListener("click", createCircle);
-    document.addEventListener("mousemove", moveCircle);
-    setBox();
-});
+var circles = [];
+var box;
 
-let lastCircle = null;
+class Circle {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.diameter = 50;
+        this.isTrapped = false;
+        this.HTML = null;
+        this.draw();
+        circles.push(this);
+    }
 
-function createCircle(event) {
-    const circle = document.createElement("div");
-    circle.className = "circle";
-    circle.style.backgroundColor = "white";
-    circle.style.position = "absolute";
-    circle.style.left = `${event.clientX - 10}px`; // Center the circle on the mouse
-    circle.style.top = `${event.clientY - 10}px`;  // Center the circle on the mouse
-    document.body.appendChild(circle);
-    lastCircle = circle;
-}
+    draw() {
+        this.HTML = document.createElement("div");
+        this.HTML.classList.add("circle");
+        this.HTML.style.position = "absolute";
+        this.HTML.style.top = this.y + "px";
+        this.HTML.style.left = this.x + "px";
+        this.HTML.style.width = this.diameter + "px";
+        this.HTML.style.height = this.diameter + "px";
+        this.HTML.style.borderRadius = "50%";
+        this.HTML.style.background = "white";
+        this.trapped();
+        document.body.appendChild(this.HTML);
+    }
 
-function moveCircle(event) {
-    if (lastCircle) {
-        const circleRect = lastCircle.getBoundingClientRect();
-        const box = document.querySelector(".box");
-
-        if (box) {
-            const boxRect = box.getBoundingClientRect();
-            const insideBox = (
-                circleRect.left > boxRect.left &&
-                circleRect.right < boxRect.right &&
-                circleRect.top > boxRect.top &&
-                circleRect.bottom < boxRect.bottom
-            );
-
-            if (insideBox) {
-                lastCircle.style.backgroundColor = "var(--purple)";
-                lastCircle = null;
-                return;
+    move(x, y) {
+        this.trapped();
+        if (!this.isTrapped) {
+            this.x = x;
+            this.y = y;
+            this.HTML.style.top = this.y + "px";
+            this.HTML.style.left = this.x + "px";
+        } else {
+            if (this.inRectangle(x, y)) {
+                this.x = x;
+                this.y = y;
+                this.HTML.style.top = this.y + "px";
+                this.HTML.style.left = this.x + "px";
+            } else {
+                if (this.inRectangle(x, this.y)) {
+                    this.x = x;
+                    this.HTML.style.left = this.x + "px";
+                } else if (this.inRectangle(this.x, y)) {
+                    this.y = y;
+                    this.HTML.style.top = this.y + "px";
+                }
             }
         }
+    }
 
-        lastCircle.style.left = `${event.clientX - 10}px`;
-        lastCircle.style.top = `${event.clientY - 10}px`;
+    trapped() {
+        if (
+            this.x > box.x &&
+            this.x + this.diameter < box.x + box.width &&
+            this.y > box.y &&
+            this.y + this.diameter < box.y + box.height
+        ) {
+            this.isTrapped = true;
+            this.HTML.style.background = "var(--purple)";
+        } else {
+            this.isTrapped = false;
+            this.HTML.style.background = "white";
+        }
+    }
+
+    inRectangle(x, y) {
+        return (
+            x > box.x &&
+            x + this.diameter < box.x + box.width &&
+            y > box.y &&
+            y + this.diameter < box.y + box.height
+        );
     }
 }
 
-function setBox() {
-    const box = document.createElement("div");
-    box.className = "box";
-    box.style.position = "absolute";
-    box.style.left = "50%";
-    box.style.top = "50%";
-    box.style.transform = "translate(-50%, -50%)";
-    box.style.width = "100px";
-    box.style.height = "100px";
-    box.style.border = "1px solid black";
-    document.body.appendChild(box);
+class Box {
+    constructor() {
+        this.HTML = document.createElement("div");
+        this.HTML.classList.add("box");
+        this.HTML.style.position = "absolute";
+        this.HTML.style.top = "50%";
+        this.HTML.style.left = "50%";
+        this.HTML.style.transform = "translate(-50%, -50%)";
+        this.HTML.style.width = "100px";
+        this.HTML.style.height = "100px";
+        this.HTML.style.border = "1px solid black";
+        document.body.appendChild(this.HTML);
+        this.x = this.HTML.offsetLeft - this.HTML.offsetWidth / 2 - 1; // -1 to account for the border
+        this.y = this.HTML.offsetTop - this.HTML.offsetHeight / 2 - 1;
+        this.width = this.HTML.offsetWidth + 1; // +1 to account for the border
+        this.height = this.HTML.offsetHeight + 1;
+    }
 }
+
+document.body.addEventListener("click", (e) => {
+    createCircle(e);
+});
+
+document.body.addEventListener("mousemove", (e) => {
+    moveCircle(e);
+});
+
+function createCircle(e) {
+    if (e === undefined) return;
+    new Circle(e.clientX - 25, e.clientY - 25);
+}
+
+function moveCircle(e) {
+    if (e === undefined || circles.length === 0) return;
+    circles[circles.length - 1].move(e.clientX - 25, e.clientY - 25);
+}
+
+function setBox() {
+    box = new Box();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    setBox();
+});
 
 export { createCircle, moveCircle, setBox };
