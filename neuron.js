@@ -1,40 +1,64 @@
-function neuron(data) {
-    if (data.length === 0) {
-      return {};
-    }
-  
-    const result = {
-      questions: {},
-      orders: {}
-    };
-  
-    data.forEach(entry => {
-      const [prefix, rest] = entry.split(': ');
-      const [subEntry, responsePart] = rest.split(' - Response: ');
-      const type = prefix.toLowerCase().slice(0, -1);
-      const key = subEntry.replace(/[\s?]/g, '_').toLowerCase();
-  
-      if (type === 'question') {
-        const question = subEntry;
-        if (!result.questions[key]) {
-          result.questions[key] = { question, responses: [] };
+function neuron(arr) {
+    var res = {};
+    for (let i = 0; i < arr.length; i++) {
+        let str = arr[i].split(' ');
+        if (/questions:/i.test(str[0])) {
+            res['questions'] ||= {};
+            let [question, response] = parseQuestionOrder(str);
+            let questionKey = question
+                .replaceAll(' ', '_')
+                .replace('?', '')
+                .toLowerCase();
+            res['questions'][questionKey] ||= {};
+            res['questions'][questionKey]['question'] = question;
+            res['questions'][questionKey]['responses'] ||= [];
+            res['questions'][questionKey]['responses'].push(response);
+        } else if (/orders:/i.test(str[0])) {
+            let [order, response] = parseQuestionOrder(str);
+            res['orders'] ||= {};
+            let orderKey = order
+                .replaceAll(' ', '_')
+                .replace('!', '')
+                .toLowerCase();
+            res['orders'][orderKey] ||= {};
+            res['orders'][orderKey]['order'] = order;
+            res['orders'][orderKey]['responses'] ||= [];
+            res['orders'][orderKey]['responses'].push(response);
+        } else if (/affirmations:/i.test(str[0])) {
+            let [affirmation, response] = parseAffirmations(str);
+            res['affirmations'] ||= {};
+            let affirmationKey = affirmation.replaceAll(' ', '_').toLowerCase();
+            res['affirmations'][affirmationKey] ||= {};
+            res['affirmations'][affirmationKey]['affirmation'] = affirmation;
+            res['affirmations'][affirmationKey]['responses'] ||= [];
+            res['affirmations'][affirmationKey]['responses'].push(response);
         }
-        result.questions[key].responses.push(responsePart);
-      } else if (type === 'order') {
-        const order = subEntry;
-        if (!result.orders[key]) {
-          result.orders[key] = { order, responses: [] };
-        }
-        result.orders[key].responses.push(responsePart);
-      }
-    });
-  
-    if (Object.keys(result.questions).length === 0) {
-      delete result.questions;
     }
-    if (Object.keys(result.orders).length === 0) {
-      delete result.orders;
-    }
-  
-    return result;
+    return res;
+}
+
+function parseQuestionOrder(arr) {
+    let statement = arr.slice(1).join(' ').split('-')[0].slice(0, -1);
+    let response = arr
+        .join(' ')
+        .split('-')
+        .slice(1)
+        .join('-')
+        .slice(1)
+        .split(' ')
+        .slice(1)
+        .join(' ');
+    return [statement, response];
+}
+
+function parseAffirmations(arr) {
+    let statement = arr.slice(1).join(' ').split('-')[0].slice(0, -1);
+    let response = arr
+        .join(' ')
+        .split('-')[1]
+        .slice(1)
+        .split(' ')
+        .slice(1)
+        .join(' ');
+    return [statement, response];
 }
