@@ -29,7 +29,6 @@ function neuron(data) {
       }
     });
   
-    // Remove empty categories if they are still empty
     if (Object.keys(result.questions).length === 0) {
       delete result.questions;
     }
