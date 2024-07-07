@@ -1,29 +1,34 @@
-function filterKeys(obj, callback) {
-    const result = {};
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key) && callback(key)) {
-        result[key] = obj[key];
-      }
-    }
-    return result;
+function filterKeys(obj, predicate) {
+    return Object.keys(obj)
+        .filter(predicate)
+        .reduce((res, key) => {
+            res[key] = obj[key];
+            return res;
+        }, {}
+    );
 }
 
 function mapKeys(obj, callback) {
-    const result = {};
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        const newKey = callback(key);
-        result[newKey] = obj[key];
-      }
-    }
-    return result;
-}  
+    return Object.keys(obj)
+        .map(callback)
+        .reduce((res, key, i) => {
+            res[key] = obj[Object.keys(obj)[i]];
+            return res;
+        }, {});
+}
+
 function reduceKeys(obj, callback, initialValue) {
-    let accumulator = initialValue;
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        accumulator = callback(accumulator, key);
-      }
+    let undef = false;
+    if (initialValue === undefined) {
+        initialValue = "";
+        undef = true;
     }
-    return accumulator;
+    let res = Object.keys(obj).reduce((acc, curr) => {
+        return callback(acc, curr, initialValue);
+    }, initialValue);
+    if (typeof res !== "number") {
+        if (res.slice(0, 2) === ", ") res = res.slice(2);
+        if (undef && res[0] === ":") res = res.slice(1);
+    }
+    return res;
 }
