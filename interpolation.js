@@ -6,13 +6,15 @@ function interpolation({
     duration = 0,
 } = {}) {
     const delta = (end - start) / step;
-    const interval = duration / step;
-
-    for (let i = 0; i < step; i++) {
-        setTimeout(() => {
-            const distance = start + delta * i;
-            const time = interval * (i + 1);
-            callback([distance, time]);
-        }, interval * i);
-    }
+    let current = start;
+    let i = 0;
+    const timer = setInterval(() => {
+        if (i < step) {
+            callback([current, (duration / step) * (i + 1)]);
+            current += delta;
+            i++;
+        } else {
+            clearInterval(timer);
+        }
+    }, duration / step);
 }
