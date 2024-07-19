@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { argv } from 'process';
 const makeVeryDisco = (word) => {
     const middle = Math.ceil(word.length / 2);

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { argv } from 'process';
 import { writeFileSync } from 'fs';
 const makeVeryDisco = (word) => {
