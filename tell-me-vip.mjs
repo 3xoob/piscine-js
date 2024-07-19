@@ -1,10 +1,16 @@
 #!/usr/bin/env node
 
-import { readFile, writeFile } from 'fs/promises';
-import { join } from 'path';
+import { promises as fsPromises } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const inputFilePath = join(__dirname, 'guests.json');
 const outputFilePath = join(__dirname, 'vip.txt');
+
+const { readFile, writeFile } = fsPromises;
 
 async function main() {
   try {
