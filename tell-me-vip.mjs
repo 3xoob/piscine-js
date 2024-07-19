@@ -29,9 +29,11 @@ async function main() {
 
     if (yesGuests.length === 0) {
       await writeFile(outputFilePath, '', 'utf8');
+      console.log('No guests responded \'YES\'. VIP list saved as empty.');
     } else {
       const formattedGuests = yesGuests.map((guest, index) => `${index + 1}. ${guest.lastname} ${guest.firstname}`);
       await writeFile(outputFilePath, formattedGuests.join('\n'), 'utf8');
+      console.log('VIP list saved successfully to vip.txt');
     }
 
     const vipExists = await fsPromises.access(outputFilePath)
@@ -40,7 +42,7 @@ async function main() {
 
     if (vipExists) {
       const vipFileContent = await readFile(outputFilePath, 'utf8');
-      return vipFileContent.trim();
+      return vipFileContent.trim(); 
     } else {
       throw new Error(`vip.txt does not exist at path: ${outputFilePath}`);
     }
