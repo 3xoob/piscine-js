@@ -4,8 +4,14 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const guestsFile = process.argv[2] + '/guests.json';
-const vipFile = process.argv[2] + '/vip.txt';
+const dirName = `guests-${randStr()}`
+const dirPath = path.join(ctx.tmpPath, dirName)
+await fs.promises.mkdir(dirPath)
+
+const guestsFile = path.join(dirPath, 'guests.json');
+const vipFile = path.join(dirPath, 'vip.txt');
+
+await fs.promises.writeFile(vipFile, '');
 
 fs.readFile(guestsFile, 'utf8', (err, data) => {
   if (err) {
@@ -20,7 +26,7 @@ fs.readFile(guestsFile, 'utf8', (err, data) => {
     if (a.lastname < b.lastname) return -1;
     if (a.lastname > b.lastname) return 1;
     if (a.firstname < b.firstname) return -1;
-    if (a.firstname > b.firstname) return 1;
+    if (a.firstname > b.firstname) return -1;
     return 0;
   });
 
