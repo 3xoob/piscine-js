@@ -13,10 +13,7 @@ export default async function handler(ctx) {
 
   const guestsFile = path.join(dirPath, 'guests.json');
   const vipFile = path.join(dirPath, 'vip.txt');
-
   await fs.promises.writeFile(vipFile, '');
-
-
   fs.readFile(guestsFile, 'utf8', (err, data) => {
     if (err) {
       console.error(err);
