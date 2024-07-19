@@ -29,15 +29,17 @@ async function main() {
 
     if (yesGuests.length === 0) {
       await writeFile(outputFilePath, '', 'utf8');
-      console.log('No guests responded \'YES\'. VIP list saved as empty.');
     } else {
       const formattedGuests = yesGuests.map((guest, index) => `${index + 1}. ${guest.lastname} ${guest.firstname}`);
       await writeFile(outputFilePath, formattedGuests.join('\n'), 'utf8');
-      console.log('VIP list saved successfully to vip.txt');
     }
+
+    const vipFileContent = await readFile(outputFilePath, 'utf8');
+    return vipFileContent.trim();
   } catch (error) {
     console.error('Error:', error);
+    return '';
   }
 }
 
-main();
+export default main;
