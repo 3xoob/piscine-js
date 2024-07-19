@@ -32,10 +32,13 @@ const main = async () => {
             return a.firstname.localeCompare(b.firstname);
         });
 
-        const output = guests.map((guest, index) => `${index + 1}. ${guest.lastname} ${guest.firstname}`).join('\n');
-        await writeFile(join(resolvedPath, 'vip.txt'), output);
-
-        console.log('VIP list has been saved to vip.txt');
+        if (guests.length > 0) {
+            const output = guests.map((guest, index) => `${index + 1}. ${guest.lastname} ${guest.firstname}`).join('\n');
+            await writeFile(join(resolvedPath, 'vip.txt'), output);
+            console.log('VIP list has been saved to vip.txt');
+        } else {
+            console.log('No VIP guests found.');
+        }
     } catch (err) {
         console.error(`Error: ${err.message}`);
     }
