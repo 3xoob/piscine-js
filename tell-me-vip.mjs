@@ -12,6 +12,8 @@ const { readFile, writeFile } = fsPromises;
 
 async function main() {
   try {
+    await mkdir(dirname(outputFilePath), { recursive: true });
+
     const data = await readFile(inputFilePath, 'utf8');
     const guests = JSON.parse(data);
 
@@ -25,27 +27,15 @@ async function main() {
       return 0;
     });
 
-    await mkdir(dirname(outputFilePath), { recursive: true });
-
     if (yesGuests.length === 0) {
       await writeFile(outputFilePath, '', 'utf8');
-      console.log('No guests responded \'YES\'. VIP list saved as empty.');
     } else {
       const formattedGuests = yesGuests.map((guest, index) => `${index + 1}. ${guest.lastname} ${guest.firstname}`);
       await writeFile(outputFilePath, formattedGuests.join('\n'), 'utf8');
-      console.log('VIP list saved successfully to vip.txt');
     }
 
-    const vipExists = await fsPromises.access(outputFilePath)
-      .then(() => true)
-      .catch(() => false);
-
-    if (vipExists) {
-      const vipFileContent = await readFile(outputFilePath, 'utf8');
-      return vipFileContent.trim(); 
-    } else {
-      throw new Error(`vip.txt does not exist at path: ${outputFilePath}`);
-    }
+    const vipFileContent = await readFile(outputFilePath, 'utf8');
+    return vipFileContent.trim();
   } catch (error) {
     console.error('Error:', error);
     return '';
