@@ -1,47 +1,44 @@
 #!/usr/bin/env node
 
-import { argv } from 'process';
-import { readdir, readFile, writeFile, mkdir } from 'fs/promises';
-import { join, resolve } from 'path';
+import fs from 'fs/promises';
+import path from 'path';
 
-const main = async () => {
-    const directoryPath = argv[2] || '.';
-    const resolvedPath = resolve(directoryPath);
+const inputFile = 'guests.json';
+const outputFile = 'vip.txt';
 
-    try {
-        await mkdir(resolvedPath, { recursive: true });
-
-        const files = await readdir(resolvedPath);
-        const jsonFiles = files.filter(file => file.endsWith('.json'));
-
-        const guests = [];
-        for (const file of jsonFiles) {
-            const filePath = join(resolvedPath, file);
-            const data = await readFile(filePath, 'utf8');
-            const jsonData = JSON.parse(data);
-
-            if (jsonData.answer === 'YES') {
-                const [lastname, firstname] = jsonData.name.split('_');
-                guests.push({ lastname, firstname });
-            }
-        }
-
-        guests.sort((a, b) => {
-            if (a.lastname < b.lastname) return -1;
-            if (a.lastname > b.lastname) return 1;
-            return a.firstname.localeCompare(b.firstname);
-        });
-
-        if (guests.length > 0) {
-            const output = guests.map((guest, index) => `${index + 1}. ${guest.lastname} ${guest.firstname}`).join('\n');
-            await writeFile(join(resolvedPath, 'vip.txt'), output);
-            console.log('VIP list has been saved to vip.txt');
-        } else {
-            console.log('No VIP guests found.');
-        }
-    } catch (err) {
-        console.error(`Error: ${err.message}`);
-    }
+const readGuests = async () => {
+  try {
+    const filePath = path.join(__dirname, inputFile);
+    const data = await fs.readFile(filePath, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error('Error reading guests file:', error);
+    return [];
+  }
 };
 
-main();
+const filterAndSortVIPs = async () => {
+  try {
+    const guests = await readGuests();
+    const vips = guests
+      .filter(guest => guest.response === 'YES')
+      .sort((a, b) => {
+        if (a.lastname < b.lastname) return -1;
+        if (a.lastname > b.lastname) return 1;
+        if (a.firstname < b.firstname) return -1;
+        if (a.firstname > b.firstname) return 1;
+        return 0;
+      });
+
+    const formattedVIPs = vips.map((vip, index) => `${index + 1}. ${vip.lastname} ${vip.firstname}`).join('\n');
+
+    const outputPath = path.join(__dirname, outputFile);
+    await fs.writeFile(outputPath, formattedVIPs);
+    console.log(`VIP list written to ${outputFile}`);
+  } catch (error) {
+    console.error('Error filtering and sorting VIPs:', error);
+  }
+};
+
+filterAndSortVIPs();
+
