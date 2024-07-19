@@ -34,8 +34,16 @@ async function main() {
       await writeFile(outputFilePath, formattedGuests.join('\n'), 'utf8');
     }
 
-    const vipFileContent = await readFile(outputFilePath, 'utf8');
-    return vipFileContent.trim();
+    const vipExists = await fsPromises.access(outputFilePath)
+      .then(() => true)
+      .catch(() => false);
+
+    if (vipExists) {
+      const vipFileContent = await readFile(outputFilePath, 'utf8');
+      return vipFileContent.trim();
+    } else {
+      throw new Error(`vip.txt does not exist at path: ${outputFilePath}`);
+    }
   } catch (error) {
     console.error('Error:', error);
     return '';
