@@ -1,7 +1,15 @@
 import fs from 'fs';
+
 import path from 'path';
 
+import { fileURLToPath } from 'url';
+
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+
 const guestsFile = path.join(__dirname, 'guests.json');
+
 const vipFile = path.join(__dirname, 'vip.txt');
 
 fs.readFile(guestsFile, 'utf8', (err, data) => {
