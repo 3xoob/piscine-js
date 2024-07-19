@@ -10,11 +10,16 @@ const main = () => {
 
     try {
         const entries = readdirSync(resolvedPath);
-        const sortedEntries = entries.sort();
-        sortedEntries.forEach((entry, index) => {
-            const [lastName, firstName] = entry.split('_');
-            const formattedName = `${index + 1}. ${lastName} ${firstName}`;
-            console.log(formattedName);
+        const guestFiles = entries.filter(entry => entry.endsWith('.json'));
+        const sortedEntries = guestFiles
+            .map(entry => {
+                const [name] = entry.split('.json');
+                return name.split('_').reverse().join(' ');
+            })
+            .sort();
+
+        sortedEntries.forEach((name, index) => {
+            console.log(`${index + 1}. ${name}`);
         });
     } catch (err) {
         console.error(`Error reading directory: ${err.message}`);
