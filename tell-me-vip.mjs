@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { argv } from 'process';
-import { readdir, readFile, writeFile } from 'fs/promises';
+import { readdir, readFile, writeFile, mkdir } from 'fs/promises';
 import { join, resolve } from 'path';
 
 const main = async () => {
@@ -9,8 +9,9 @@ const main = async () => {
     const resolvedPath = resolve(directoryPath);
 
     try {
-        const files = await readdir(resolvedPath);
+        await mkdir(resolvedPath, { recursive: true });
 
+        const files = await readdir(resolvedPath);
         const jsonFiles = files.filter(file => file.endsWith('.json'));
 
         const guests = [];
