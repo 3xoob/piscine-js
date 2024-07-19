@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { promises as fsPromises } from 'fs';
+import { promises as fsPromises, mkdir } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -28,6 +28,8 @@ async function main() {
     });
 
     const formattedGuests = yesGuests.map((guest, index) => `${index + 1}. ${guest.lastname} ${guest.firstname}`);
+
+    await mkdir(dirname(outputFilePath), { recursive: true });
 
     await writeFile(outputFilePath, formattedGuests.join('\n'), 'utf8');
     console.log('VIP list saved successfully to vip.txt');
