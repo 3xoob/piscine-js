@@ -1,46 +1,36 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-const randStr = () => Math.random().toString(36).substr(2, 9);
-
-export default async function handler(ctx) {
-  const dirName = `guests-${randStr()}`
-  const dirPath = path.join(ctx.tmpPath, dirName)
-  await fs.promises.mkdir(dirPath)
-
-  const guestsFile = path.join(dirPath, 'guests.json');
-  const vipFile = path.join(dirPath, 'vip.txt');
-  await fs.promises.writeFile(vipFile, '');
-  fs.readFile(guestsFile, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-
-    const guests = JSON.parse(data);
-    const vipGuests = guests.filter((guest) => guest.response === 'YES');
-
-    vipGuests.sort((a, b) => {
-      if (a.lastname < b.lastname) return -1;
-      if (a.lastname > b.lastname) return 1;
-      if (a.firstname < b.firstname) return -1;
-      if (a.firstname > b.firstname) return -1;
-      return 0;
+import { writeFile, readdir, readFile } from 'fs/promises'
+const args = process.argv.slice(2);
+const arg = args[0];
+const files = await readdir(arg);
+async function writeContent(fName, msg) {
+    await writeFile(fName, msg, function (err) {
+        if (err) console.log(err);
     });
-
-    const vipList = vipGuests.map((guest, index) => `${index + 1}. ${guest.lastname} ${guest.firstname}`);
-
-    fs.writeFile(vipFile, vipList.join('\n'), (err) => {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log('VIP list saved to vip.txt');
-      }
-    });
-  });
-
-  return { data: fs.readFileSync(vipFile, 'utf8') };
 }
+async function solve(l) {
+    let arr = [];
+    for (let i = 0; i < files.length; i++) {
+        const content = await readFile(arg + "/" + files[i], 'utf8');
+        const obj = JSON.parse(content);
+        if (obj.answer === 'yes') {
+            arr.push(files[i]);
+        }
+    }
+    let arr2 = [];
+    for (let i = 0; i < arr.length; i++) {
+        let list = arr[i].split('_');
+        let fName = list[0];
+        let lName = list[1].slice(0, list[1].length-5);
+        let line = lName + " " + fName;
+        arr2.push(line);
+    }
+    arr2.sort();
+    let arr3 = [];
+    for (let i = 0; i < arr2.length; i++) {
+        let n = i + 1;
+        arr3.push(n + ". " + arr2[i]);
+    }
+    const res = arr3.join('\n');
+    writeContent('vip.txt', res);
+}
+solve(files);
